@@ -18,6 +18,12 @@ Make sure the following are installed on your system:
 
 - **Bazel** ([installation guide](https://bazel.build/install))
 - **git**
+- **Git Large File Storage (LFS)** ([Git LFS installation guide](https://git-lfs.com))
+
+To install Git LFS:
+```bash
+git lfs install
+```
 
 ### 📥 Repository Setup
 
@@ -26,7 +32,9 @@ To obtain and prepare the source code:
 ```bash
 git clone https://github.com/UniBwTAS/bagzel.git
 cd bagzel
+git lfs pull
 ```
+>⚠️ Ensure you run `git lfs pull` to fetch large files such as bag files tracked via Git LFS.
 
 ## 🛠️ Build and Run: Minimal Working Example
 
