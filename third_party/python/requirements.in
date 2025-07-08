@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+pandas==2.2.3
+numpy==2.2.5
+folium==0.19.5
+opencv-python==4.11.0.86
+matplotlib==3.10.3
+

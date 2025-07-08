@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# === Load custom Starlark rules/macros ===
+load("//src:starlark/macros/declare_rosbag_artifacts.bzl", "declare_rosbag_artifacts")  # Converts rosbags to image sequences
+
+# === Configuration Parameters ===
+TOPICS = [
+    "/sensor/camera/surround/front/image_raw",
+    # Additional camera topics can be enabled if needed
+    # "/sensor/camera/surround/right/image_raw",
+    # "/sensor/camera/surround/left/image_raw",
+    # "/sensor/camera/surround/back/image_raw",
+    # "/sensor/camera/roof/ir/image_raw",
+]
+
+
+# === Workstation Testing ===
+# Local small-scale test to declare rosbags from a directory into build targets
+declare_rosbag_artifacts(
+    name = "rosbags_sub1",
+    topics = TOPICS,
+    rosbag_dir = "rosbags",
+)
+
+
+# === Rosbag Preprocessing ===
+# Legacy system: Simple glob to gather all rosbags
+# Note: For more scalable systems, use a metadata-driven approach
+# filegroup(
+#     name = "rosbag_dir",
+#     srcs = glob(["rosbags/**/*.bag"]),
+# )
+
+# Example of a smarter rosbag filter (currently disabled)
+# filter_rosbag(
+#     name = "generate_valid_rosbags",
+#     rosbag_dir = "//data:rosbag_dir",
+#     topics = ["/sensor/camera/surround/front/image_raw"],
+#     filter_tool = "//src:rosbag_filter_parallel",
+# )
+
+
+# # === Cluster Deployment / Full Dataset Processing ===
+
+
+# # === Batch declare_rosbag_artifacts definitions for all years ===
+# # Converts rosbags from each year into image sequences for training pipelines
+# declare_rosbag_artifacts(name = "sequence_streams_2012", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2012")
+# declare_rosbag_artifacts(name = "sequence_streams_2013", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2013")
+# declare_rosbag_artifacts(name = "sequence_streams_2014", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2014")
+# declare_rosbag_artifacts(name = "sequence_streams_2015", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2015")
+# declare_rosbag_artifacts(name = "sequence_streams_2016", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2016")
+# declare_rosbag_artifacts(name = "sequence_streams_2017", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2017")
+# declare_rosbag_artifacts(name = "sequence_streams_2018", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2018")
+# declare_rosbag_artifacts(name = "sequence_streams_2019", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2019")
+# declare_rosbag_artifacts(name = "sequence_streams_2020", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2020")
+# declare_rosbag_artifacts(name = "sequence_streams_2021", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2021")
+# declare_rosbag_artifacts(name = "sequence_streams_2022", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2022")
+# declare_rosbag_artifacts(name = "sequence_streams_2023", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2023")
+# declare_rosbag_artifacts(name = "sequence_streams_2024", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2024")
+# declare_rosbag_artifacts(name = "sequence_streams_2025", rosbag_tool = ROSBAG_TOOL, sequence_tool = SEQUENCE_TOOL, merge_tool = MERGE_TOOL, topics = TOPICS, rosbag_dir = "streams/2025")

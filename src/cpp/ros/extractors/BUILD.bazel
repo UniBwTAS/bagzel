@@ -1,0 +1,111 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@rules_ros//ros:cc_defs.bzl", "cc_ros_binary")
+
+# ==============================================================================
+# ROS Bag Extractor Binaries
+# These tools use ROS runtime and extract various data from .bag files.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Extracts images from a ROS bag and writes them to disk
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_to_images",
+    srcs = ["rosbag_to_images.cpp"],
+    deps = [
+        "@opencv//:opencv",
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+        "@ros_common_msgs//:cc_sensor_msgs",
+        "@vision_opencv//:cv_bridge",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Extracts structured metadata from ROS bags (e.g., message rates, sensors)
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_to_metadata",
+    srcs = ["rosbag_to_metadata.cpp"],
+    deps = [
+        "@NCOMdecoder//:NCOMdecoder",
+        "@ethernet_msgs//:cc_ethernet_msgs",
+        "@nlohmann_json//:json",
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Extracts GPS data from ROS bags into JSON format
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_to_oxts",
+    srcs = ["rosbag_to_oxts.cpp"],
+    deps = [
+        "@NCOMdecoder//:NCOMdecoder",
+        "@ethernet_msgs//:cc_ethernet_msgs",
+        "@geographiclib//:geographiclib",
+        "@nlohmann_json//:json",
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Extracts static and dynamic transforms from a ROS bag
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_to_transforms",
+    srcs = ["rosbag_to_transforms.cpp"],
+    deps = [
+        "@nlohmann_json//:json",
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+        "@ros_common_msgs//:cc_geometry_msgs",
+        "@ros_common_msgs//:cc_sensor_msgs",
+        "@ros_geometry2//:tf2_ros",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Extracts and projects transform trajectory from a ROS bag into JSON
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_to_tf_trajectory",
+    srcs = ["rosbag_to_tf_trajectory.cpp"],
+    deps = [
+        "@nlohmann_json//:json",
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+        "@ros_geometry2//:tf2_ros",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Group target to build all binaries in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        ":rosbag_to_images",
+        ":rosbag_to_metadata",
+        ":rosbag_to_oxts",
+        ":rosbag_to_transforms",
+        ":rosbag_to_tf_trajectory",
+    ],
+    visibility = ["//visibility:public"],
+)

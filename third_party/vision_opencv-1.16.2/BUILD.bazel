@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+cc_library(
+    name = "cv_bridge",
+    srcs = [
+        "cv_bridge/src/cv_bridge.cpp",
+        "cv_bridge/src/rgb_colors.cpp",
+    ],
+    hdrs = [
+        "cv_bridge/include/cv_bridge/cv_bridge.h",
+        "cv_bridge/include/cv_bridge/rgb_colors.h",
+    ],
+    includes = [
+        "cv_bridge/include", 
+    ],
+    deps = [
+        "@opencv//:opencv",
+        "@ros_comm//:roscpp_lib",
+        "@ros_common_msgs//:cc_sensor_msgs_lib",
+        "@boost.endian//:boost.endian",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "image_geometry",
+    srcs = [
+        "image_geometry/src/pinhole_camera_model.cpp",
+        "image_geometry/src/stereo_camera_model.cpp",
+    ],
+    hdrs = [
+        "image_geometry/include/image_geometry/pinhole_camera_model.h",
+        "image_geometry/include/image_geometry/stereo_camera_model.h",
+        "image_geometry/include/image_geometry/exports.h",
+    ],
+    includes = [
+        "image_geometry/include", 
+    ],
+    deps = [
+        "@opencv//:opencv",
+        "@ros_common_msgs//:cc_sensor_msgs_lib",
+    ],
+    visibility = ["//visibility:public"],
+)

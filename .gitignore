@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# --- Bazel output directories ---
+bazel-*
+!docs/bazel-profiling.md
+bazel-out/
+bazel-bin/
+bazel-testlogs/
+bazel-cache/
+user.bazelrc
+
+# --- Local Bazel state ---
+*.runfiles/
+*.log
+*.tmp
+*.swp
+*.lock
+
+# --- IDEs / Editors ---
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# --- Python bytecode ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- Build artifacts ---
+*.o
+*.so
+*.a
+*.exe
+
+# --- Data exclusions and selective retention ---
+# Ignore all contents of the 'data/rosbags' directory...
+data/rosbags/*
+
+# ...except specific sessions that must be tracked
+!data/rosbags/2024-06-26_15-08-50_tas/
+!data/rosbags/2025-04-28_itsc_albi_pemo_forest/
+
+# Exclude other data and log directories
+data/streams
+data/output
+logs

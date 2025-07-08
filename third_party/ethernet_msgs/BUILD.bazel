@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@rules_ros//ros:interfaces.bzl", 
+     "ros_interface_library", 
+     "cc_ros_interface_library", 
+     "py_ros_interface_library")
+
+# Step 1: Declare the ROS messages (.msg files)
+ros_interface_library(
+    name = "ethernet_msgs",
+    srcs = glob(["msg/*.msg"]),
+    deps = ["@ros_std_msgs//:std_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+# Step 2: Generate the C++ interface library
+cc_ros_interface_library(
+    name = "cc_ethernet_msgs",
+    deps = [":ethernet_msgs"],
+    visibility = ["//visibility:public"],
+)
+
+# Step 3 (Optional): Python interface library
+py_ros_interface_library(
+    name = "py_ethernet_msgs",
+    deps = [":ethernet_msgs"],
+    visibility = ["//visibility:public"],
+)

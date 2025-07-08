@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@rules_ros//ros:cc_defs.bzl", "cc_ros_binary")
+
+# ==============================================================================
+# ROS Tools
+# These tools depend on the ROS runtime and operate on bag content or trajectory data.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Displays metadata and summary info from a ROS bag
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_info",
+    srcs = ["rosbag_info.cpp"],
+    deps = [
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Filters messages in a ROS bag by topic or timestamp
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_filter",
+    srcs = ["rosbag_filter.cpp"],
+    deps = [
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Multi-threaded ROS bag filtering for improved performance
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "rosbag_filter_parallel",
+    srcs = ["rosbag_filter_parallel.cpp"],
+    deps = [
+        "@ros_comm//:rosbag_storage",
+        "@ros_comm//:roscpp_lib",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Extracts and visualizes trajectory in a 2D camera projection
+# ------------------------------------------------------------------------------
+cc_ros_binary(
+    name = "project_trajectory_to_image",
+    srcs = ["project_trajectory_to_image.cpp"],
+    deps = [
+        "@nlohmann_json//:json",
+        "@opencv//:opencv",
+        "@ros_comm//:roscpp_lib",
+        "@ros_common_msgs//:cc_sensor_msgs",
+        "@vision_opencv//:cv_bridge",
+        "@vision_opencv//:image_geometry",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Transforms a trajectory using a corresponding TF transform
+# ------------------------------------------------------------------------------
+cc_binary(
+    name = "transform_trajectory",
+    srcs = ["transform_trajectory.cpp"],
+    deps = [
+        "@eigen//:eigen",
+        "@nlohmann_json//:json",
+        "@ros_comm//:roscpp_lib",
+        "@ros_common_msgs//:cc_geometry_msgs",
+        "@ros_geometry2//:tf2_ros",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Group target to build all binaries in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        ":rosbag_info",
+        ":rosbag_filter",
+        ":rosbag_filter_parallel",
+        ":project_trajectory_to_image",
+        ":transform_trajectory",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# ==============================================================================
+# Core C++ Tools (Non-ROS)
+# These tools are standalone C++ binaries with no ROS runtime dependencies.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Merges multiple annotation files into a unified JSON output
+# ------------------------------------------------------------------------------
+cc_binary(
+    name = "merge_annotations",
+    srcs = ["merge_annotations.cpp"],
+    deps = [
+        "@nlohmann_json//:json",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Converts a directory of images into a sequential data format (e.g., frames)
+# ------------------------------------------------------------------------------
+cc_binary(
+    name = "images_to_sequence",
+    srcs = ["images_to_sequence.cpp"],
+    deps = [
+        "@nlohmann_json//:json",
+    ],
+    copts = ["-std=c++17"],
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Group target to build all binaries in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        ":merge_annotations",
+        ":images_to_sequence",
+    ],
+    visibility = ["//visibility:public"],
+)

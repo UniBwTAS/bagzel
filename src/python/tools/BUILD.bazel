@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@rules_python//python:defs.bzl", "py_binary")
+
+# ------------------------------------------------------------------------------
+# Python Binaries
+# ------------------------------------------------------------------------------
+
+# Aggregates GPS data from multiple logs and visualizes it on a map
+py_binary(
+    name = "multi_gps_to_map",
+    srcs = ["multi_gps_to_map.py"],
+    deps = [
+        "@pypi//pandas:pkg",
+        "@pypi//numpy:pkg",
+        "@pypi//folium:pkg",
+    ],
+    main = "multi_gps_to_map.py",
+    visibility = ["//:__subpackages__"],
+)
+
+# Visualizes sequential trajectory data on a frame-by-frame basis
+py_binary(
+    name = "vis_seq_traj",
+    srcs = ["vis_seq_traj.py"],
+    deps = [
+        "@pypi//opencv_python:pkg",
+        "@pypi//numpy:pkg",
+        "@pypi//matplotlib:pkg",
+    ],
+    main = "vis_seq_traj.py",
+    visibility = ["//:__subpackages__"],
+)
+
+# ------------------------------------------------------------------------------
+# Group target to build all Python binaries in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        ":multi_gps_to_map",
+        ":vis_seq_traj",
+    ],
+    visibility = ["//visibility:public"],
+)

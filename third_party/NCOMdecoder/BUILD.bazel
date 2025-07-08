@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+cc_library(
+    name = "NCOMdecoder",
+    srcs = [
+        "nav/NComRxC.c",
+    ],
+    hdrs = [
+        "nav/NComRxC.h",
+    ],
+    includes = ["nav"],  # ✅ This line fixes include resolution
+    visibility = ["//visibility:public"],
+)
