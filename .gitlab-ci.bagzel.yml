@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+build_bagzel:
+  stage: build
+  image:
+    name: gcr.io/bazel-public/bazel:latest
+    entrypoint: [""]
+  parallel:
+    matrix:
+      - TARGET: "//data:rosbags_sub1_all"
+        LABEL: "Build Rosbags"
+      - TARGET: "//src:everything"
+        LABEL: "Build Code"
+  script:
+    - cd cluster/bagzel/
+    - bazel build "$TARGET"
+  only:
+    - branches
+    - merge_requests

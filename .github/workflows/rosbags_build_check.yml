@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Rosbags Build Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  rosbags_build_check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        lfs: true  # optional, but helps ensure LFS files are fetched
+    
+    - name: Pull Git LFS objects
+      run: git lfs pull
+
+    - name: Build rosbags with Bazel
+      uses: addnab/docker-run-action@v3
+      with:
+        image: gcr.io/bazel-public/bazel:latest
+        options: -v ${{ github.workspace }}:/workspace -w /workspace
+        run: |
+          bazel build //data:rosbags_sub1_all
+
