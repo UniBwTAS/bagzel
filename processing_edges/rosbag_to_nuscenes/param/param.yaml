@@ -1,0 +1,32 @@
+<!--
+SPDX-FileCopyrightText: 2026 Lukas Beer <lukas.beer@unibw.de>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+BAG_INFO:
+  VEHICLE: TOUAREG
+  DESCRIPTION: Touareg of the Institute for Autonomous Driving
+  ODOM_TOPIC: /localization/egomotion/odom #/bus/oxts/eth_ncom/bus_to_host
+  TRACK: TOUAREG
+SENSOR_INFO:
+  LIDAR_TOP:
+    TOPIC: /bus/vls128_roof/eth_scan/bus_to_host
+    FRAME: sensor/lidar/vls128_roof
+    TOKEN: a0000000000000000000000000000001
+  CAM_FRONT:
+    TOPIC: /sensor/camera/surround/front/image_raw
+    FRAME: sensor/camera/surround/front
+    TOKEN: a0000000000000000000000000000002
+  CAM_LEFT:
+    TOPIC: /sensor/camera/surround/left/image_raw
+    FRAME: sensor/camera/surround/left
+    TOKEN: a0000000000000000000000000000003
+  CAM_BACK:
+    TOPIC: /sensor/camera/surround/back/image_raw
+    FRAME: sensor/camera/surround/back
+    TOKEN: a0000000000000000000000000000004
+  CAM_RIGHT:
+    TOPIC: /sensor/camera/surround/right/image_raw
+    FRAME: sensor/camera/surround/right
+    TOKEN: a0000000000000000000000000000005

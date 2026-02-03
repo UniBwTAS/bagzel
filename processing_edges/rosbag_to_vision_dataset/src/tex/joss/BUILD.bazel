@@ -1,0 +1,155 @@
+# SPDX-FileCopyrightText: 2026 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@bazel_latex//:latex.bzl", "latex_document")
+
+sh_binary(
+    name = "inara_docker",
+    srcs = ["tools/inara_docker.sh"],
+)
+
+genrule(
+    name = "joss_paper_pdf",
+    srcs = [
+        "paper.md",
+        "paper.bib",
+    ] + glob(["figs/**/*.pdf"]),
+    tools = [":inara_docker"],
+    outs = ["paper.pdf"],
+    cmd_bash = """
+        set -euo pipefail
+
+        # $(location paper.md) expands to the path of paper.md in the execroot.
+        # "$@" is replaced by the output file list (here: paper.pdf).
+        "$(location :inara_docker)" "$(location paper.md)" "$@"
+    """,
+    local = True,
+    visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "joss_paper_preprint",
+    srcs = [
+        "paper.md",
+        "paper.bib",
+    ] + glob(["figs/**/*.pdf"]),
+    tools = [":inara_docker"],
+    outs = ["paper.preprint.tex"],
+    cmd_bash = """
+        set -euo pipefail
+
+        # 1) Generate the preprint TeX via Inara
+        "$(location :inara_docker)" "$(location paper.md)" "$@"
+    """,
+    local = True,
+    visibility = ["//visibility:public"],
+)
+
+latex_document(
+    name = "paper_preprint_pdf",
+    srcs = [
+        ":joss_paper_preprint",
+        "paper.bib",
+        "tex_deps/authblk.sty",
+        "tex_deps/loadhyph-en-us.tex",
+        "tex_deps/hyph-en-us.tex",
+        "@bazel_latex//packages:amsmath",
+        "@bazel_latex//packages:amssymb",
+        "@bazel_latex//packages:iftex",
+        "@bazel_latex//packages:unicode-math",
+        "@bazel_latex//packages:upquote",
+        "@bazel_latex//packages:microtype",
+        "@bazel_latex//packages:parskip",
+        "@bazel_latex//packages:xcolor",
+        "@bazel_latex//packages:calc",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__generic__babel",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__generic__babel-english",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__luatexbase",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__ctablestack",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__hyph-utf8",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__lualatex__selnolig",
+        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__latex__orcidlink",
+        "@bazel_latex//packages:subcaption",
+        "@bazel_latex//packages:hyperref",
+        "@bazel_latex//packages:url",
+        "@bazel_latex//packages:tikz",
+    ] + glob(["figs/**/*"]),
+    main = "paper.preprint.tex",
+)
+
+filegroup(
+    name = "arxiv_sources",
+    srcs = [
+        ":joss_paper_preprint",  # -> paper.preprint.tex
+        "paper.bib",
+    ] + glob([
+        "figs/**/*",
+        "tex_deps/**/*",
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "arxiv_submission",
+    srcs = [":arxiv_sources"],
+    outs = ["paper_arxiv.tar.gz"],
+    cmd_bash = """
+        set -euo pipefail
+
+        # Clean + recreate staging dir
+        rm -rf arxiv
+        mkdir -p arxiv
+
+        for f in $(SRCS); do
+            base=$$(basename "$$f")
+
+            if [[ "$$base" == "paper.preprint.tex" ]]; then
+                # main TeX file for arXiv
+                cp "$$f" arxiv/main.tex
+
+            elif [[ "$$base" == "paper.bib" ]]; then
+                # bibliography at top-level
+                cp "$$f" arxiv/paper.bib
+
+            elif [[ "$$f" == *"/figs/"* ]]; then
+                # keep figs/ substructure
+                rel=figs/$${f##*figs/}
+                mkdir -p "arxiv/$$(dirname "$$rel")"
+                cp "$$f" "arxiv/$$rel"
+
+            elif [[ "$$f" == *"/tex_deps/"* ]]; then
+                # keep tex_deps/ substructure
+                rel=tex_deps/$${f##*tex_deps/}
+                mkdir -p "arxiv/$$(dirname "$$rel")"
+                cp "$$f" "arxiv/$$rel"
+            fi
+        done
+
+        # Create tar.gz for arXiv
+        tar -czf "$@" -C arxiv .
+    """,
+    local = True,
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "figs_files",
+    srcs = glob(["figs/**/*.pdf"]),
+    visibility = ["//visibility:public"],
+)
+
+exports_files(["paper.md", "paper.bib"])
+
+filegroup(
+    name = "everything",
+    srcs = [
+        ":joss_paper_pdf",
+        ":joss_paper_preprint",
+        ":paper_preprint_pdf",
+        ":arxiv_submission",
+    ],
+    visibility = ["//visibility:public"],
+)
+# ------------------------------------------------------------------------------
+

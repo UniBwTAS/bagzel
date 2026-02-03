@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+exports_files(["external_repository.bzl","external_repository_impl.bzl"])

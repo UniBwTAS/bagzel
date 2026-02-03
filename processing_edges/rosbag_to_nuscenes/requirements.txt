@@ -1,0 +1,10 @@
+rosbags
+rosbags-image
+velodyne-decoder
+opencv-python
+numpy
+scipy
+matplotlib
+lxml
+PyYAML
+#nuscenes-devkit==1.1.11

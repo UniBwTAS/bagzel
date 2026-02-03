@@ -9,7 +9,7 @@
 
 module(
     name = "bagzel",
-    version = "0.1.0",
+    version = "0.2.0",
 )
 
 # ------------------------------------------------------------------------------
@@ -67,6 +67,14 @@ use_repo(
     "urdfdom_headers",
 )
 
+bazel_dep(name = "bazel_latex")
+
+git_override(
+    module_name = "bazel_latex", 
+    remote = "https://github.com/ProdriveTechnologies/bazel-latex.git",
+    commit = "227b02f346c1dd0098d32b5bcb1ef874dd367e2a",
+)
+
 # ------------------------------------------------------------------------------
 # Rules for Fetching Repositories via http_archive and pip
 # ------------------------------------------------------------------------------
@@ -75,19 +83,43 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 # ------------------------------------------------------------------------------
-# Python Package Management via pip
+# Python package management (global + extractors)
 # ------------------------------------------------------------------------------
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
+# Global Python packages (main environment, Python 3.10)
 pip.parse(
     hub_name = "pypi",
-    python_version = "3.10",  # Must match the toolchain version
-    requirements_lock = "//third_party/python:requirements_lock.txt",
-    requirements_windows = "//third_party/python:requirements_lock.txt",
+    python_version = "3.10",  # Must match the main toolchain version
+    requirements_lock = "@bagzel//processing_edges/rosbag_to_vision_dataset/third_party/python:requirements_lock.txt",
+    requirements_windows = "@bagzel//processing_edges/rosbag_to_vision_dataset/third_party/python:requirements_lock.txt",
 )
-
 use_repo(pip, "pypi")
+
+# Nuscenes extractor environment (Python 3.8)
+pip.parse(
+    hub_name = "pip_rosbag_to_nuscenes",
+    python_version = "3.8",  # Must match the nuscenes toolchain version
+    # requirements_darwin = "//cluster/data-pipeline/processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt"
+    requirements_by_platform = {
+        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt": "linux_x86_64",
+    },
+)
+use_repo(pip, "pip_rosbag_to_nuscenes")
+
+
+
+# ------------------------------------------------------------------------------
+# Python toolchains
+# ------------------------------------------------------------------------------
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+
+# Global toolchains; 3.8 is needed for nuscenes, others optional
+python.toolchain(python_version = "3.8")  # Needed for nuscenes extractor
+
+use_repo(python, "python_versions")
 
 # ------------------------------------------------------------------------------
 # Additional Third-Party Dependencies (Not via BCR)
@@ -96,7 +128,7 @@ use_repo(pip, "pypi")
 # ROS-compatible OpenCV bridge
 http_archive(
     name = "vision_opencv",
-    build_file = "third_party/vision_opencv-1.16.2/BUILD.bazel",
+    build_file = "@bagzel//processing_edges/rosbag_to_vision_dataset/third_party/vision_opencv-1.16.2:BUILD.bazel",
     strip_prefix = "vision_opencv-1.16.2",
     urls = ["https://github.com/ros-perception/vision_opencv/archive/refs/tags/1.16.2.tar.gz"],
     sha256 = "046f3bac5dcdaea5678bf5e6be10d895bbd670cc16c7b97ba4c1a6b661f8557e",
@@ -105,7 +137,7 @@ http_archive(
 # NCOM binary decoder from Oxford Technical Solutions
 http_archive(
     name = "NCOMdecoder",
-    build_file = "third_party/NCOMdecoder/BUILD.bazel",
+    build_file = "@bagzel//processing_edges/rosbag_to_vision_dataset/third_party/NCOMdecoder:BUILD.bazel",
     strip_prefix = "NCOMdecoder-6bd95e9a5f826556e1c4c0bc586fec3f973c76e3",
     urls = ["https://github.com/OxfordTechnicalSolutions/NCOMdecoder/archive/6bd95e9a5f826556e1c4c0bc586fec3f973c76e3.zip"],
     sha256 = "d22e1d29e43be9cb8e93a072c24c7c2cda549eedf6b9225a2195ff03f397f900",
@@ -114,8 +146,27 @@ http_archive(
 # Custom Ethernet message definitions (ROS message package)
 http_archive(
     name = "ethernet_msgs",
-    build_file = "third_party/ethernet_msgs/BUILD.bazel",
+    build_file = "@bagzel//processing_edges/rosbag_to_vision_dataset/third_party/ethernet_msgs:BUILD.bazel",
     strip_prefix = "ethernet_msgs-b434f952e4550b69ec334dac8d259d4a5ea4a84a",
     urls = ["https://github.com/UniBwTAS/ethernet_msgs/archive/b434f952e4550b69ec334dac8d259d4a5ea4a84a.zip"],
     sha256 = "dff505d1389fef8ec217eada3c7d8979641481b4608d87c7fd2c080c5d2baaf7",
 )
+
+external_repository = use_extension("@bagzel//starlark/core/external_repository:external_repository.bzl", "external_repository")
+
+external_repository.local_repo(
+    repo_name = "example_data", # name des repository
+    build_file = "@bagzel//starlark/macros/graph_build:BUILD.graph.bazel",
+    empty_build_file = "@bagzel//starlark/macros/graph_build:BUILD.graph.empty.bazel",
+    path = "data_example/", # path zum data ordner
+)
+
+use_repo(external_repository, "example_data")
+
+bazel_dep(name = "bagzel_config")
+
+local_path_override(
+    module_name = "bagzel_config",
+    path = "config",   # or wherever your default config lives inside bagzel
+)
+

@@ -26,8 +26,8 @@ jobs:
     - name: Build rosbags with Bazel
       uses: addnab/docker-run-action@v3
       with:
-        image: gcr.io/bazel-public/bazel:8.3.1
+        image: gcr.io/bazel-public/bazel:8.4.1
         options: -v ${{ github.workspace }}:/workspace -w /workspace
         run: |
-          bazel build //data:rosbags_sub1_all
+          bazel build @example_data//:data_pipeline_processed__everything
 

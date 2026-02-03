@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2025 Lukas Beer <lukas.beer@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+exports_files([
+    "BUILD.graph.bazel",
+    "BUILD.graph.empty.bazel",
+])

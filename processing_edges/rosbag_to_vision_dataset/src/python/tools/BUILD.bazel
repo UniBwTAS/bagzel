@@ -1,0 +1,73 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@rules_python//python:defs.bzl", "py_binary")
+
+# ------------------------------------------------------------------------------
+# Python Binaries
+# ------------------------------------------------------------------------------
+
+# Aggregates GPS data from multiple logs and visualizes it on a map
+py_binary(
+    name = "multi_gps_to_map",
+    srcs = ["multi_gps_to_map.py"],
+    deps = [
+        "@pypi//pandas:pkg",
+        "@pypi//numpy:pkg",
+        "@pypi//folium:pkg",
+    ],
+    main = "multi_gps_to_map.py",
+    visibility = ["//visibility:public"],
+)
+
+# Visualizes sequential trajectory data on a frame-by-frame basis
+py_binary(
+    name = "vis_seq_traj",
+    srcs = ["vis_seq_traj.py"],
+    deps = [
+        "@pypi//opencv_python:pkg",
+        "@pypi//numpy:pkg",
+        "@pypi//matplotlib:pkg",
+    ],
+    main = "vis_seq_traj.py",
+    visibility = ["//visibility:public"],
+)
+
+# Visualizes sequential trajectory data on a frame-by-frame basis
+py_binary(
+    name = "images_to_mp4",
+    srcs = ["images_to_mp4.py"],
+    deps = [
+        "@pypi//opencv_python:pkg",
+        "@pypi//natsort:pkg",
+    ],
+    main = "images_to_mp4.py",
+    visibility = ["//visibility:public"],
+)
+
+# Splits a directory with train, val and test directory containing bags into a bzl split
+py_binary(
+    name = "generate_rosbag_splits",
+    srcs = ["generate_rosbag_splits.py"],
+    deps = [
+        # "@pypi//opencv_python:pkg",
+        # "@pypi//natsort:pkg",
+    ],
+    main = "generate_rosbag_splits.py",
+    visibility = ["//visibility:public"],
+)
+
+# ------------------------------------------------------------------------------
+# Group target to build all Python binaries in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        ":multi_gps_to_map",
+        ":vis_seq_traj",
+        ":images_to_mp4",
+        ":generate_rosbag_splits",
+    ],
+    visibility = ["//visibility:public"],
+)

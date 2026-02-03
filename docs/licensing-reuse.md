@@ -32,7 +32,7 @@ This verifies that:
 Automatically add SPDX headers to all Bazel (`.bzl`) files:
 
 ```bash
-reuse --root ~/git/pas-mono-intern/cluster/bagzel annotate \
+reuse --root ./bagzel annotate \
   --skip-unrecognised \
   --copyright="Leon Pohl <leon.pohl@unibw.de>" \
   --license="Apache-2.0" \

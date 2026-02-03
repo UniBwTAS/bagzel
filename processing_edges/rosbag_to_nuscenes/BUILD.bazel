@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: 2026 Lukas Beer <lukas.beer@unibw.de>
+# SPDX-FileCopyrightText: 2026 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@python_versions//3.8:defs.bzl", "py_binary")
+load("@bagzel//starlark/core:starlark_to_json.bzl", "starlark_to_json", "write_text_file")
+load("@bagzel_config//:config.bzl", "nuscenes_param_dict")
+
+write_text_file(
+    name = "nuscenes_param.json",
+    out_name = "nuscenes_param.json",
+    content = starlark_to_json(nuscenes_param_dict()) + "\n",
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
+  name = "rosbag_to_nuscenes",
+  srcs = ["rosbag_to_nuscenes.py"] + glob(["src/**/*.py"]),
+  main = "rosbag_to_nuscenes.py",
+  deps = [
+"@pip_rosbag_to_nuscenes//rosbags",
+"@pip_rosbag_to_nuscenes//rosbags_image",
+"@pip_rosbag_to_nuscenes//velodyne_decoder",
+"@pip_rosbag_to_nuscenes//opencv_python",
+"@pip_rosbag_to_nuscenes//numpy",
+"@pip_rosbag_to_nuscenes//scipy",
+"@pip_rosbag_to_nuscenes//matplotlib",
+"@pip_rosbag_to_nuscenes//lxml",
+"@pip_rosbag_to_nuscenes//pyyaml",
+  ],
+  visibility = ["//visibility:public"],
+)

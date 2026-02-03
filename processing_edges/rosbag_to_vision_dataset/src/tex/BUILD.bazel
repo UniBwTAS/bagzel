@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# ------------------------------------------------------------------------------
+# Group target to build all tex files in this package
+# ------------------------------------------------------------------------------
+filegroup(
+    name = "everything",
+    srcs = [
+        "//src/tex/joss:everything",
+    ],
+    visibility = ["//visibility:public"],
+)

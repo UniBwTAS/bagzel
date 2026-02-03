@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2025 Lukas Beer <lukas.beer@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@bagzel//:starlark/macros/graph.bzl", "graph_macro")
+
+graph_macro(
+    name = "data_pipeline_processed",
+    input_bag_files = glob(["**/*.bag"] + ["**/*.db3"], allow_empty = True,),
+    output_dir = "data-pipeline-processed",
+)

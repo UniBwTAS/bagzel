@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+load("@bagzel//:starlark/macros/graph.bzl", "graph_macro")
+
 # The following aliases are defined for convenience.
 
 alias(
@@ -32,4 +34,12 @@ alias(
 alias(
     name = "rosservice",
     actual = "@rules_ros//third_party/ros/rosservice",
+)
+
+filegroup(
+    name = "data_pipeline_processed",
+    srcs = [
+        "@example_data//:data_pipeline_processed"
+    ],
+    visibility = ["//visibility:public"],
 )

@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2025 Lukas Beer <lukas.beer@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# ------------------------------------------------------------------------------
+# Legacy / alternative configuration (kept for reference)
+# ------------------------------------------------------------------------------
+
+# These used to include MODULE.bazel fragments directly, which is not allowed
+# in non-root modules under bzlmod. Kept here as documentation of the old setup.
+#
+# include("//src/python/extractors/rosbag_to_nuscenes:rosbag_to_nuscenes.MODULE.bazel")
+# include("//src/python/extractors/rosbag1_to_rosbag2:rosbag1_to_rosbag2.MODULE.bazel")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip_rosbag_to_nuscenes",
+    python_version = "3.8",
+   # requirements_darwin = "//cluster/data-pipeline/processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt"
+    requirements_by_platform = {
+        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt": "linux_x86_64"
+    },
+)
+use_repo(pip, "pip_rosbag_to_nuscenes")

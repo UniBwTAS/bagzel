@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2025 Lukas Beer <lukas.beer@unibw.de>
+# SPDX-FileCopyrightText: 2025 Leon Pohl <leon.pohl@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+load("@python_versions//3.8:defs.bzl", "py_binary")
+load("@bagzel//starlark/core:shellrule.bzl", "shellrule")
+
+py_binary(
+  name = "mwe_print_filenames",
+  srcs = ["mwe_print_filenames.py"],
+  main = "mwe_print_filenames.py",
+  visibility = ["//visibility:public"],
+)
+
+exports_files(["mwe_print_filenames.bzl"])

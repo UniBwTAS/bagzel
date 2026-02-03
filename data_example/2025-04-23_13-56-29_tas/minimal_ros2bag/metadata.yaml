@@ -1,0 +1,446 @@
+rosbag2_bagfile_information:
+  compression_format: ''
+  compression_mode: ''
+  custom_data: null
+  duration:
+    nanoseconds: 415135274
+  files:
+  - duration:
+      nanoseconds: 415135274
+    message_count: 2803
+    path: minimal_ros2bag.db3
+    starting_time:
+      nanoseconds_since_epoch: 1745409390915383219
+  message_count: 2803
+  relative_file_paths:
+  - minimal_ros2bag.db3
+  ros_distro: rosbags
+  starting_time:
+    nanoseconds_since_epoch: 1745409390915383219
+  storage_identifier: sqlite3
+  topics_with_message_count:
+  - message_count: 3
+    topic_metadata:
+      name: /tf_static
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: tf2_msgs/msg/TFMessage
+      type_description_hash: 
+        RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+  - message_count: 1
+    topic_metadata:
+      name: /bus/vls128_roof/eth_scan/event
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Event
+      type_description_hash: 
+        RIHS01_1c199587013b609ee766f256560be6c493fd40aae18fe9c52d0e9cb768f51f5b
+  - message_count: 123
+    topic_metadata:
+      name: /bus/umrr/eth_measurements/bus_to_host
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Packet
+      type_description_hash: 
+        RIHS01_e9e651c72bec4a4f5c3492a99af8ff4fcb0c72f99035dec7a11b01f51d00f860
+  - message_count: 1
+    topic_metadata:
+      name: /bus/umrr/eth_measurements/event
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Event
+      type_description_hash: 
+        RIHS01_1c199587013b609ee766f256560be6c493fd40aae18fe9c52d0e9cb768f51f5b
+  - message_count: 37
+    topic_metadata:
+      name: /actuator/joint_states
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/JointState
+      type_description_hash: 
+        RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e
+  - message_count: 76
+    topic_metadata:
+      name: /tf
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: tf2_msgs/msg/TFMessage
+      type_description_hash: 
+        RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087
+  - message_count: 280
+    topic_metadata:
+      name: /bus/dspace/can_vehicle/bus_to_host
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: can_msgs/msg/Frame
+      type_description_hash: 
+        RIHS01_0cdc7d15657573ee6ff151e5cc1943888301e370d957e2c077a154f4755fd976
+  - message_count: 20
+    topic_metadata:
+      name: /actuator/vehicle/feedback
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: vehicle_msgs/msg/Feedback
+      type_description_hash: 
+        RIHS01_37dabeb4c339556ba321b937f994488894a4250b597529b505cb36f95b5552e3
+  - message_count: 144
+    topic_metadata:
+      name: /bus/dspace/can_camera_platform/bus_to_host
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: can_msgs/msg/Frame
+      type_description_hash: 
+        RIHS01_0cdc7d15657573ee6ff151e5cc1943888301e370d957e2c077a154f4755fd976
+  - message_count: 16
+    topic_metadata:
+      name: /actuator/camera_platform/feedback
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: camera_platform_msgs/msg/FeedbackStamped
+      type_description_hash: 
+        RIHS01_04f909dbe5bd7afe5323395cb92313e1cb767a608d0ac6ebc14cb01939459ea2
+  - message_count: 19
+    topic_metadata:
+      name: /localization/egomotion/odom
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: nav_msgs/msg/Odometry
+      type_description_hash: 
+        RIHS01_3cc97dc7fb7502f8714462c526d369e35b603cfc34d946e3f2eda2766dfec6e0
+  - message_count: 19
+    topic_metadata:
+      name: /actuator/camera_platform/control
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: camera_platform_msgs/msg/ControlStamped
+      type_description_hash: 
+        RIHS01_9faf2743917861c8b680a489c522b900df769716d151e4efb7b0223a0c1e33e9
+  - message_count: 133
+    topic_metadata:
+      name: /bus/dspace/can_camera_platform/host_to_bus
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: can_msgs/msg/Frame
+      type_description_hash: 
+        RIHS01_0cdc7d15657573ee6ff151e5cc1943888301e370d957e2c077a154f4755fd976
+  - message_count: 37
+    topic_metadata:
+      name: /bus/oxts/eth_ncom/bus_to_host
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Packet
+      type_description_hash: 
+        RIHS01_e9e651c72bec4a4f5c3492a99af8ff4fcb0c72f99035dec7a11b01f51d00f860
+  - message_count: 1
+    topic_metadata:
+      name: /bus/oxts/eth_ncom/event
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Event
+      type_description_hash: 
+        RIHS01_1c199587013b609ee766f256560be6c493fd40aae18fe9c52d0e9cb768f51f5b
+  - message_count: 28
+    topic_metadata:
+      name: /bus/dspace/can_vehicle/host_to_bus
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: can_msgs/msg/Frame
+      type_description_hash: 
+        RIHS01_0cdc7d15657573ee6ff151e5cc1943888301e370d957e2c077a154f4755fd976
+  - message_count: 1
+    topic_metadata:
+      name: /bus/oxts/eth_rtcmv3/event
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Event
+      type_description_hash: 
+        RIHS01_1c199587013b609ee766f256560be6c493fd40aae18fe9c52d0e9cb768f51f5b
+  - message_count: 5
+    topic_metadata:
+      name: /sensor/camera/surround/front/extended_camera_info
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: camera_aravis/msg/ExtendedCameraInfo
+      type_description_hash: 
+        RIHS01_0877d8c0ad9110a09f9e840c81496a5f758a6b0d45d2f5d0d473f8aa54f46526
+  - message_count: 7
+    topic_metadata:
+      name: /actuator/camera_platform/high_level_feedback
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: camera_platform_msgs/msg/HighLevelFeedback
+      type_description_hash: 
+        RIHS01_4a47059b1b6c90ff9871d0dad568766b547b300ebb9a91ee685161930a9797d1
+  - message_count: 5
+    topic_metadata:
+      name: /sensor/camera/surround/left/extended_camera_info
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: camera_aravis/msg/ExtendedCameraInfo
+      type_description_hash: 
+        RIHS01_0877d8c0ad9110a09f9e840c81496a5f758a6b0d45d2f5d0d473f8aa54f46526
+  - message_count: 17
+    topic_metadata:
+      name: 
+        /actuator/camera_platform/object_or_steering_angle_follower/visualization
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: visualization_msgs/msg/Marker
+      type_description_hash: 
+        RIHS01_ef6026625bee42b301f7cdaa9c71d7fcb409dc0fc5e4cd6040248d257d627b47
+  - message_count: 17
+    topic_metadata:
+      name: /actuator/camera_platform/high_level_control
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: camera_platform_msgs/msg/HighLevelControl
+      type_description_hash: 
+        RIHS01_6d5f3b350bf2483c4a766901b89960c4bcfdde8e187c9acf376030eb7179fd05
+  - message_count: 4
+    topic_metadata:
+      name: /sensor/camera/surround/back/extended_camera_info
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: camera_aravis/msg/ExtendedCameraInfo
+      type_description_hash: 
+        RIHS01_0877d8c0ad9110a09f9e840c81496a5f758a6b0d45d2f5d0d473f8aa54f46526
+  - message_count: 4
+    topic_metadata:
+      name: /sensor/camera/surround/right/extended_camera_info
+      offered_qos_profiles:
+      - avoid_ros_namespace_conventions: false
+        deadline:
+          nsec: 4294967295
+          sec: 2147483647
+        depth: 0
+        durability: transient_local
+        history: unknown
+        lifespan:
+          nsec: 4294967295
+          sec: 2147483647
+        liveliness: automatic
+        liveliness_lease_duration:
+          nsec: 4294967295
+          sec: 2147483647
+        reliability: reliable
+      serialization_format: cdr
+      type: camera_aravis/msg/ExtendedCameraInfo
+      type_description_hash: 
+        RIHS01_0877d8c0ad9110a09f9e840c81496a5f758a6b0d45d2f5d0d473f8aa54f46526
+  - message_count: 1767
+    topic_metadata:
+      name: /bus/vls128_roof/eth_scan/bus_to_host
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: ethernet_msgs/msg/Packet
+      type_description_hash: 
+        RIHS01_e9e651c72bec4a4f5c3492a99af8ff4fcb0c72f99035dec7a11b01f51d00f860
+  - message_count: 4
+    topic_metadata:
+      name: /sensor/camera/surround/front/camera_info
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/CameraInfo
+      type_description_hash: 
+        RIHS01_b303399feda782bcc44e57b8eec9baaa9e0e5a7cd4a89fee8cffe588d6dc93ed
+  - message_count: 4
+    topic_metadata:
+      name: /sensor/camera/surround/front/image_raw
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: 
+        RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 6
+    topic_metadata:
+      name: /actuator/vehicle/control
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: vehicle_msgs/msg/Control
+      type_description_hash: 
+        RIHS01_8dcde0986a2c0ee038d934b6e73e1317fed2cfc19a2642ff780871624eef99e0
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/right/camera_info
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/CameraInfo
+      type_description_hash: 
+        RIHS01_b303399feda782bcc44e57b8eec9baaa9e0e5a7cd4a89fee8cffe588d6dc93ed
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/right/image_raw
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: 
+        RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/back/camera_info
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/CameraInfo
+      type_description_hash: 
+        RIHS01_b303399feda782bcc44e57b8eec9baaa9e0e5a7cd4a89fee8cffe588d6dc93ed
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/back/image_raw
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: 
+        RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/marveye/left/camera_info
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/CameraInfo
+      type_description_hash: 
+        RIHS01_b303399feda782bcc44e57b8eec9baaa9e0e5a7cd4a89fee8cffe588d6dc93ed
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/left/camera_info
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/CameraInfo
+      type_description_hash: 
+        RIHS01_b303399feda782bcc44e57b8eec9baaa9e0e5a7cd4a89fee8cffe588d6dc93ed
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/marveye/left/image_raw
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: 
+        RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  - message_count: 3
+    topic_metadata:
+      name: /sensor/camera/surround/left/image_raw
+      offered_qos_profiles: []
+      serialization_format: cdr
+      type: sensor_msgs/msg/Image
+      type_description_hash: 
+        RIHS01_d31d41a9a4c4bc8eae9be757b0beed306564f7526c88ea6a4588fb9582527d47
+  version: 8
