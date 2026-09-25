@@ -8,7 +8,7 @@
 filegroup(
     name = "everything",
     srcs = [
-        "//src/python/tools:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/python/tools:everything",
     ],
     visibility = ["//visibility:public"],
 )

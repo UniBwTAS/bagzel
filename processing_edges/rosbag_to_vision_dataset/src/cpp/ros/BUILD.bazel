@@ -5,8 +5,8 @@
 filegroup(
     name = "everything",
     srcs = [
-        "//src/cpp/ros/extractors:everything",
-        "//src/cpp/ros/tools:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/cpp/ros/extractors:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/cpp/ros/tools:everything",
     ],
     visibility = ["//visibility:public"],
 )

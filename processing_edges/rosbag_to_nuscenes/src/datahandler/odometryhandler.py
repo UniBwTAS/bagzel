@@ -1,7 +1,3 @@
-# SPDX-FileCopyrightText: 2026 Lukas Beer <lukas.beer@unibw.de>
-#
-# SPDX-License-Identifier: Apache-2.0
-
 from scipy.spatial.transform import Rotation
 
 
@@ -14,6 +10,13 @@ class OdomHandler:
         self.__roll = None
         self.__pitch = None
         self.__stamp = None
+        self.__vx = None
+        self.__vy = None
+        self.__vz = None
+        self.__vyaw = None
+        self.__vroll = None
+        self.__vpitch = None
+
 
 
 
@@ -26,9 +29,15 @@ class OdomHandler:
         self.__qy = msg.pose.pose.orientation.y
         self.__qz = msg.pose.pose.orientation.z
         self.__qw = msg.pose.pose.orientation.w
-
+        self.__vx = msg.twist.twist.linear.x
+        self.__vy = msg.twist.twist.linear.y
+        self.__vz = msg.twist.twist.linear.z
+        self.__vroll = msg.twist.twist.angular.x
+        self.__vpitch = msg.twist.twist.angular.y
+        self.__vyaw = msg.twist.twist.angular.z
 
         rot = Rotation.from_quat([ self.__qx, self.__qy, self.__qz, self.__qw ])
+
 
         euler = rot.as_euler('xyz', degrees=True).tolist()
 
@@ -53,4 +62,8 @@ class OdomHandler:
         return [self.__roll, self.__pitch, self.__yaw]
     def getOdomStamp(self):
         return self.__stamp
+    def getOdomTwistLinear(self):
+        return [self.__vx, self.__vy, self.__vz]
+    def getOdomTwistAngular(self):
+        return [self.__vroll, self.__vpitch, self.__vyaw]
 

@@ -15,10 +15,11 @@
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 pip.parse(
     hub_name = "pip_rosbag_to_nuscenes",
-    python_version = "3.8",
+    python_version = "3.10",
    # requirements_darwin = "//cluster/data-pipeline/processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt"
     requirements_by_platform = {
-        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt": "linux_x86_64"
+        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt": "linux_x86_64",
+        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.macosx.aarch64.txt": "osx_aarch64",
     },
 )
 use_repo(pip, "pip_rosbag_to_nuscenes")

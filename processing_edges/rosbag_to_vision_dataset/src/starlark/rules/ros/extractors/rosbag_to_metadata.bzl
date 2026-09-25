@@ -21,6 +21,11 @@ def _rosbag_to_metadata_impl(ctx):
             output_file.path,
         ],
         progress_message = "[Generating] Metadata in directory: '{}'".format(rosbag_name),
+        execution_requirements = {
+            # Rosbags can be multi-GB inputs; keep extraction local so Bazel
+            # does not try to upload them to remote CAS/executors.
+            "no-remote-exec": "1",
+        },
     )
 
     return [DefaultInfo(files = depset([output_file]))]

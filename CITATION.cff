@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+message: "If you use Bagzel, please cite the papers below."
+authors:
+  - family-names: Pohl
+    given-names: Leon
+  - family-names: Beer
+    given-names: Lukas
+  - family-names: Sebastian
+    given-names: George
+  - family-names: Maehlisch
+    given-names: Mirko
+title: "Bagzel"
+license: Apache-2.0
+preferred-citation:
+  type: conference-paper
+  title: "Modeling Robotics Dataset Construction as an Artifact-Based Build Process"
+  authors:
+    - family-names: Pohl
+      given-names: Leon
+    - family-names: Beer
+      given-names: Lukas
+    - family-names: Sebastian
+      given-names: George
+    - family-names: Maehlisch
+      given-names: Mirko
+  year: 2026
+  month: 8
+  conference:
+    name: "2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE)"
+    date-start: "2026-08-17"
+    date-end: "2026-08-21"
+    location: "Shenyang, China"
+  publisher:
+    name: IEEE
+references:
+  - type: article
+    title: "Modeling Robotics Dataset Construction as an Artifact-Based Build Process"
+    authors:
+      - family-names: Pohl
+        given-names: Leon
+      - family-names: Beer
+        given-names: Lukas
+      - family-names: Sebastian
+        given-names: George
+      - family-names: Maehlisch
+        given-names: Mirko
+    year: 2026
+    month: 5
+    url: "https://arxiv.org/abs/2606.00162"
+    doi: "10.48550/arXiv.2606.00162"
+  - type: article
+    title: "Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags"
+    authors:
+      - family-names: Pohl
+        given-names: Leon
+      - family-names: Beer
+        given-names: Lukas
+      - family-names: Sebastian
+        given-names: George
+      - family-names: Maehlisch
+        given-names: Mirko
+    year: 2026
+    month: 2
+    url: "https://engrxiv.org/preprint/view/6452"
+    doi: "10.31224/6452"

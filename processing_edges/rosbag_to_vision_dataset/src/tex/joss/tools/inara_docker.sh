@@ -3,103 +3,113 @@
 # SPDX-License-Identifier: Apache-2.0
 set -euo pipefail
 
-# Args:
-#   $1 = path to paper.md (in execroot)
-#   $2 = output path (pdf or tex, in execroot)
+if [[ $# -lt 2 || $# -gt 3 ]]; then
+  echo "usage: $0 <paper.md> <output.{pdf,tex}> [preprint_pdf]" >&2
+  exit 2
+fi
+
 PAPER_MD="$1"
 OUT_PATH="$2"
+MODE="${3:-auto}"
+IMAGE="${INARA_DOCKER_IMAGE:-openjournals/inara:latest}"
 
 SRCDIR="$(dirname "$PAPER_MD")"
 ABS_SRCDIR="$(cd "$SRCDIR" && pwd)"
 BASENAME="$(basename "$PAPER_MD")"
 BASEROOT="${BASENAME%.md}"
+WORKDIR="$(mktemp -d)"
+CONTAINER_IDS=()
 
-echo "[inara] PAPER_MD:   $PAPER_MD"
-echo "[inara] SRCDIR:     $SRCDIR"
-echo "[inara] ABS_SRCDIR: $ABS_SRCDIR"
-echo "[inara] OUT_PATH:   $OUT_PATH"
+cleanup() {
+  for container_id in "${CONTAINER_IDS[@]}"; do
+    docker rm -f "$container_id" >/dev/null 2>&1 || true
+  done
+  rm -rf "$WORKDIR"
+}
+trap cleanup EXIT
 
-# Decide output mode based on OUT_PATH extension
-case "$OUT_PATH" in
-  *.pdf)
-    INARA_OUTPUT="pdf"              # or "pdf,preprint" if you want both
-    EXPECTED_NAME="${BASEROOT}.pdf" # name inside WORKDIR
+case "$MODE:$OUT_PATH" in
+  preprint_pdf:*.pdf)
+    INARA_OUTPUT="preprint"
+    EXPECTED_NAME="${BASEROOT}.preprint.pdf"
+    PREPRINT_TEX_NAME="${BASEROOT}.preprint.tex"
     ;;
-  *.tex)
+  *:*.pdf)
+    INARA_OUTPUT="pdf"
+    EXPECTED_NAME="${BASEROOT}.pdf"
+    ;;
+  *:*.tex)
     INARA_OUTPUT="preprint"
     EXPECTED_NAME="${BASEROOT}.preprint.tex"
     ;;
   *)
-    echo "[inara][ERROR] Unknown output extension (expected .pdf or .tex): $OUT_PATH" >&2
-    exit 1
+    echo "unsupported output or mode: $MODE:$OUT_PATH" >&2
+    exit 2
     ;;
 esac
 
-# Decide whether we are in a Docker-outside-of-Docker CI setup
-if [ -e "/build-temp" ]; then
-  echo "[inara] Detected Docker-outside-of-Docker setup (CI)."
+command -v docker >/dev/null 2>&1 || {
+  echo "docker not found in PATH" >&2
+  exit 1
+}
+docker info >/dev/null 2>&1 || {
+  echo "docker daemon is not reachable" >&2
+  exit 1
+}
 
-  if [ ! -w /build-temp ]; then
-    echo "[inara][ERROR] /build-temp is not writable" >&2
-    exit 1
-  fi
+# Bazel inputs may be symlinks into the execroot. Dereference them before
+# transferring the source tree into Docker so this also works with a host
+# Docker daemon accessed from a CI runner container.
+cp -LR "$ABS_SRCDIR/." "$WORKDIR/"
 
-  WORKDIR="/build-temp/inara.$$"
-  mkdir -p "$WORKDIR"
+run_inara() {
+  local container_id
+  container_id="$(
+    docker create \
+      -w /data \
+      -e JOURNAL=joss \
+      "$IMAGE" \
+      -o "$INARA_OUTPUT" \
+      "$BASENAME"
+  )"
+  CONTAINER_IDS+=("$container_id")
+  docker cp "$WORKDIR/." "$container_id:/data"
+  docker start -a "$container_id"
+  docker cp "$container_id:/data/." "$WORKDIR/"
+}
 
-  echo "[inara] Copying sources from $ABS_SRCDIR to $WORKDIR"
-  cp -a "$ABS_SRCDIR/." "$WORKDIR/"
+compile_preprint() {
+  local container_id
+  container_id="$(
+    docker create \
+      -w /data \
+      --entrypoint latexmk \
+      "$IMAGE" \
+      -interaction=nonstopmode \
+      -halt-on-error \
+      -lualatex \
+      "$PREPRINT_TEX_NAME"
+  )"
+  CONTAINER_IDS+=("$container_id")
+  docker cp "$WORKDIR/." "$container_id:/data"
+  docker start -a "$container_id"
+  docker cp "$container_id:/data/." "$WORKDIR/"
+}
 
-  DOCKER_MOUNT="build-temp:/build-temp"
-  DOCKER_WORKDIR="$WORKDIR"
-else
-  echo "[inara] No /build-temp: running with direct Docker access (local dev)."
+echo "[inara] source: $ABS_SRCDIR/$BASENAME"
+echo "[inara] image:  $IMAGE"
+echo "[inara] mode:   $MODE ($INARA_OUTPUT)"
 
-  WORKDIR="$ABS_SRCDIR"
-  DOCKER_MOUNT="$ABS_SRCDIR:/data"
-  DOCKER_WORKDIR="/data"
+run_inara
+if [[ "$MODE" == "preprint_pdf" ]]; then
+  compile_preprint
 fi
 
-EXPECTED_PATH="$WORKDIR/$EXPECTED_NAME"
-
-echo "[inara] WORKDIR (host/container-visible): $WORKDIR"
-echo "[inara] Docker mount: -v $DOCKER_MOUNT"
-echo "[inara] Docker workdir: $DOCKER_WORKDIR"
-echo "[inara] Inara output mode: $INARA_OUTPUT"
-echo "[inara] Expected Inara artifact: $EXPECTED_PATH"
-
-# Check that Docker is reachable
-if docker info >/dev/null 2>&1; then
-  echo "[inara] ✅ Docker daemon is reachable"
-else
-  echo "[inara] ❌ Docker daemon is NOT reachable" >&2
+if [[ ! -f "$WORKDIR/$EXPECTED_NAME" ]]; then
+  echo "expected output not found: $WORKDIR/$EXPECTED_NAME" >&2
   exit 1
 fi
 
-# Run Inara
-docker run --rm \
-  -v "$DOCKER_MOUNT" \
-  -w "$DOCKER_WORKDIR" \
-  -u "$(id -u):$(id -g)" \
-  -e JOURNAL=joss \
-  openjournals/inara:latest \
-  -o "$INARA_OUTPUT" \
-  "$BASENAME"
-
-# Move result into Bazel's declared output
-if [ ! -f "$EXPECTED_PATH" ]; then
-  echo "[inara][ERROR] Expected output not found at: $EXPECTED_PATH" >&2
-  ls -la "$WORKDIR" || true
-  exit 1
-fi
-
-echo "[inara] Moving $EXPECTED_PATH -> $OUT_PATH"
-mv "$EXPECTED_PATH" "$OUT_PATH"
-
-# Cleanup temporary workdir in CI
-if [[ "$WORKDIR" == /build-temp/inara.* ]]; then
-  echo "[inara] Cleaning up temporary workdir $WORKDIR"
-  rm -rf "$WORKDIR"
-fi
-
-echo "[inara] Done."
+mkdir -p "$(dirname "$OUT_PATH")"
+cp "$WORKDIR/$EXPECTED_NAME" "$OUT_PATH"
+echo "[inara] output: $OUT_PATH"

@@ -34,30 +34,6 @@ py_binary(
     visibility = ["//visibility:public"],
 )
 
-# Visualizes sequential trajectory data on a frame-by-frame basis
-py_binary(
-    name = "images_to_mp4",
-    srcs = ["images_to_mp4.py"],
-    deps = [
-        "@pypi//opencv_python:pkg",
-        "@pypi//natsort:pkg",
-    ],
-    main = "images_to_mp4.py",
-    visibility = ["//visibility:public"],
-)
-
-# Splits a directory with train, val and test directory containing bags into a bzl split
-py_binary(
-    name = "generate_rosbag_splits",
-    srcs = ["generate_rosbag_splits.py"],
-    deps = [
-        # "@pypi//opencv_python:pkg",
-        # "@pypi//natsort:pkg",
-    ],
-    main = "generate_rosbag_splits.py",
-    visibility = ["//visibility:public"],
-)
-
 # ------------------------------------------------------------------------------
 # Group target to build all Python binaries in this package
 # ------------------------------------------------------------------------------
@@ -66,8 +42,6 @@ filegroup(
     srcs = [
         ":multi_gps_to_map",
         ":vis_seq_traj",
-        ":images_to_mp4",
-        ":generate_rosbag_splits",
     ],
     visibility = ["//visibility:public"],
 )

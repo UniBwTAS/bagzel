@@ -13,7 +13,7 @@ load("//processing_edges/rosbag_to_vision_dataset/src:starlark/rules/ros/extract
 load("//processing_edges/rosbag_to_vision_dataset/src:starlark/rules/ros/extractors/rosbag_to_tf_trajectory.bzl", "rosbag_to_tf_trajectory")
 load("@bagzel_config//:config.bzl", "VALID_ROSBAGS")
 
-# NOTE: If this file is used from external repos (e.g. @example_data_pad),
+# NOTE: If this file is used from external repos (e.g. @example_data),
 # prefer explicit repo labels like "@bagzel//..." for tools to avoid resolution surprises.
 _ROSBAG_TOOLS = {
     "metadata": "@bagzel//processing_edges/rosbag_to_vision_dataset/src/cpp/ros/extractors:rosbag_to_metadata",

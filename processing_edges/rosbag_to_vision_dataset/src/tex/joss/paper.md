@@ -36,7 +36,7 @@ affiliations:
  - name: Institute for Autonomous Driving, University of the Bundeswehr Munich, Germany
    index: 1
    ror: 05kkv3f82
-date: 4 February 2026
+date: 9 February 2026
 bibliography: paper.bib
 header-includes:
   - \usepackage{subcaption}
@@ -181,6 +181,8 @@ image space; and (f) a bird’s-eye-view (BEV) LiDAR projection.}
   \label{fig:nuscenes-bagzel}
 \end{figure}
 
+\clearpage
+
 # Research Impact Statement
 Bagzel is used at the Institute for Autonomous Driving, University of the Bundeswehr Munich, to generate reproducible datasets from large ROS 1 and ROS 2 bag collections for autonomous driving research. It supports ongoing perception and localization projects where frequent dataset regeneration and retraining are required. The software has been presented at BazelCon 2025 [@pohlBazelCon:2025] and ROSCon DE & FR 2025 [@pohlRosCon:2025] and is released as open source with public documentation, enabling adoption by other research groups.
 
@@ -190,5 +192,7 @@ Generative AI tools were used in a limited capacity for code assistance and lang
 # Acknowledgements
 
 The authors acknowledge support from the Federal Office of Bundeswehr Equipment, Information Technology, and In-Service Support (BAAINBw). This work was also supported by dtec.bw, the Digitalization and Technology Research Center of the Bundeswehr, under project MORE. Dtec.bw is funded by the European Union through the NextGenerationEU program. We thank our colleagues at the Institute for Autonomous Driving, University of the Bundeswehr Munich, for feedback and for providing vehicles, data, and recording infrastructure. We also thank the ROS and Bazel open-source communities.
+
+\clearpage
 
 # References

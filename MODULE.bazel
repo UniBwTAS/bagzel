@@ -9,19 +9,20 @@
 
 module(
     name = "bagzel",
-    version = "0.2.0",
+    version = "0.3.0",
 )
 
 # ------------------------------------------------------------------------------
 # Core Bazel Dependencies
 # ------------------------------------------------------------------------------
 
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_python", version = "1.3.0")
 bazel_dep(name = "boost.endian", version = "1.83.0.bcr.2") # Boost components used by the C++ targets
 bazel_dep(name = "opencv", version = "4.11.0.bcr.2") # OpenCV via BCR
 bazel_dep(name = "nlohmann_json", version = "3.12.0") # Nlohmann JSON library via BCR
 bazel_dep(name = "geographiclib", version = "2.4.0.bcr.2") # GeographicLib via BCR
-bazel_dep(name = "eigen", version = "4.0.0-20241125.bcr.1") # Eigen library via BCR
+bazel_dep(name = "eigen", version = "4.0.0-20241125.bcr.2") # Eigen library via BCR
 
 # ------------------------------------------------------------------------------
 # ROS Rules (from GitHub, with archive override for specific commit)
@@ -67,13 +68,6 @@ use_repo(
     "urdfdom_headers",
 )
 
-bazel_dep(name = "bazel_latex")
-
-git_override(
-    module_name = "bazel_latex", 
-    remote = "https://github.com/ProdriveTechnologies/bazel-latex.git",
-    commit = "227b02f346c1dd0098d32b5bcb1ef874dd367e2a",
-)
 
 # ------------------------------------------------------------------------------
 # Rules for Fetching Repositories via http_archive and pip
@@ -100,10 +94,11 @@ use_repo(pip, "pypi")
 # Nuscenes extractor environment (Python 3.8)
 pip.parse(
     hub_name = "pip_rosbag_to_nuscenes",
-    python_version = "3.8",  # Must match the nuscenes toolchain version
+    python_version = "3.10",  # Must match the nuscenes toolchain version
     # requirements_darwin = "//cluster/data-pipeline/processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt"
     requirements_by_platform = {
         "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.linux.x86_64.txt": "linux_x86_64",
+        "@bagzel//processing_edges/rosbag_to_nuscenes:requirements_lock.macosx.aarch64.txt": "osx_aarch64",
     },
 )
 use_repo(pip, "pip_rosbag_to_nuscenes")
@@ -117,7 +112,7 @@ use_repo(pip, "pip_rosbag_to_nuscenes")
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
 # Global toolchains; 3.8 is needed for nuscenes, others optional
-python.toolchain(python_version = "3.8")  # Needed for nuscenes extractor
+python.toolchain(python_version = "3.10")  # Needed for nuscenes extractor
 
 use_repo(python, "python_versions")
 
@@ -152,16 +147,18 @@ http_archive(
     sha256 = "dff505d1389fef8ec217eada3c7d8979641481b4608d87c7fd2c080c5d2baaf7",
 )
 
-external_repository = use_extension("@bagzel//starlark/core/external_repository:external_repository.bzl", "external_repository")
-
-external_repository.local_repo(
-    repo_name = "example_data", # name des repository
+# The example dataset lives in the immutable GitHub release archive (v0.2.0),
+# not in the repository. Bazel downloads it automatically at first use -- no
+# Git LFS or manual download is required for the minimal working example.
+http_archive(
+    name = "example_data",
+    urls = [
+        "https://github.com/UniBwTAS/bagzel/releases/download/v0.2.0/example_data.tar.gz",
+    ],
+    sha256 = "22d59bfe42a149f62bdc4168a6a7b2bc33046ea2295b1de564332393f8a2bf82",
+    strip_prefix = "data_example",
     build_file = "@bagzel//starlark/macros/graph_build:BUILD.graph.bazel",
-    empty_build_file = "@bagzel//starlark/macros/graph_build:BUILD.graph.empty.bazel",
-    path = "data_example/", # path zum data ordner
 )
-
-use_repo(external_repository, "example_data")
 
 bazel_dep(name = "bagzel_config")
 
@@ -169,4 +166,3 @@ local_path_override(
     module_name = "bagzel_config",
     path = "config",   # or wherever your default config lives inside bagzel
 )
-

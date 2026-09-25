@@ -7,7 +7,7 @@ from nuscenes.utils.data_classes import RadarPointCloud
 import numpy as np
 #nusc = NuScenes(version='v1.0-mini', dataroot='/home/lube/playground/2023-02-23-13-37-10_20', verbose=True)
 #nusc = NuScenes(version='v1.0-mini', dataroot='tas_nuscenes_merged', verbose=True)
-nusc =  NuScenes(version='v1.0-mini', dataroot='/home/lube/git/pas2/pas-mono-intern/cluster/data-pipeline/processing-edges/rosbag_to_nuscenes/output_test/2024-02-12-12-31-06_0/v1.0-mini', verbose=True)
+nusc =  NuScenes(version='v1.0-mini', dataroot='/home/lepo/git/bagzel_eval/small/build/rosbag2nuscenes_output/20260220_142106/cold_run_2/ros2/ros2bag/ros2bag/ros2bag_0/v1.0-mini', verbose=True)
 
 print("Initialized NuScenes dataset")
 nusc.list_scenes()

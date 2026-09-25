@@ -26,6 +26,11 @@ def _rosbag_to_tf_trajectory_impl(ctx):
             progress_message = "📍 Extracting TF trajectory of '{}' in '{}' using {}".format(
                 target_frame, reference_frame, bag.path),
             mnemonic = "ExtractTFFrameTrajectory",
+            execution_requirements = {
+                # Rosbags can be multi-GB inputs; keep extraction local so Bazel
+                # does not try to upload them to remote CAS/executors.
+                "no-remote-exec": "1",
+            },
         )
 
         output_files.append(output_file)

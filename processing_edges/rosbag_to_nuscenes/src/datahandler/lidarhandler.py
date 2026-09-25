@@ -9,8 +9,8 @@ import numpy as np
 class LidarHandler:
     def __init__(self):
         self.__pointcloud = np.ndarray(shape=(0, 4), dtype=np.float32)  # Initialize with an empty array
-        self.__start_stamp = None
-        self.__cut_angle = 180
+        self.__end_stamp = None
+        self.__cut_angle = 225 # for better results
         self.__start_angle = None
         self.__decoder = vd.ScanDecoder()
         self.__config = vd.Config()
@@ -28,7 +28,7 @@ class LidarHandler:
         self.__pointcloud  = self.__stream_decoder.decode(stamp, msg.payload, as_pcl_structs=True)
         if(self.__pointcloud is not None):
 #            print(self.__pointcloud[0].device)
-            self.__start_stamp = timestamp #self.__pointcloud[0].host
+            self.__end_stamp = timestamp #self.__pointcloud[0].host
             self.__pointcloud = self.__pointcloud[1]
 
     #returns [timestamp, pointcloud] or None if rotation not finished
@@ -36,7 +36,7 @@ class LidarHandler:
         return self.__pointcloud
 
     def getTimestamp(self):
-        return self.__start_stamp
+        return self.__end_stamp
 
     def getFrameId(self):
         return self.__frame_id

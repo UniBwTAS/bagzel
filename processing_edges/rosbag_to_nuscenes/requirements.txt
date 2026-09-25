@@ -4,6 +4,7 @@ velodyne-decoder
 opencv-python
 numpy
 scipy
+pyproj
 matplotlib
 lxml
 PyYAML

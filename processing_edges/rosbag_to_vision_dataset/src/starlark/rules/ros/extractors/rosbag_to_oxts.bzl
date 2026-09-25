@@ -20,6 +20,11 @@ def _rosbag_to_oxts_impl(ctx):
             oxts_ip, 
         ],
         progress_message = "[Extracting GPS] {}".format(rosbag_name),
+        execution_requirements = {
+            # Rosbags can be multi-GB inputs; keep extraction local so Bazel
+            # does not try to upload them to remote CAS/executors.
+            "no-remote-exec": "1",
+        },
     )
 
     return [DefaultInfo(files = depset([output_csv]))]

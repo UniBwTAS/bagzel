@@ -45,16 +45,12 @@ def _slurmrule_impl(ctx):
     # Use SLURM if the build is invoked with --define use_slurm=true
     use_slurm = ctx.var.get("use_slurm", "false") == "true"
 
+    additional_inputs = []
+
     if use_slurm:
         job_script = ctx.actions.declare_file(ctx.label.name + ".slurm.sh")
 
         job_id_file = ctx.actions.declare_file(ctx.label.name + ".jobid")
-
-        ctx.actions.write(
-            output = job_id_file,
-            content = "JOBID",
-            is_executable = False,
-        )
 
 
 
@@ -67,6 +63,8 @@ def _slurmrule_impl(ctx):
             "#SBATCH --job-name={}".format(ctx.label.name),
             "#SBATCH --cpus-per-task={}".format(ctx.attr.num_cpus),
             "#SBATCH --mem=15G",
+            "#SBATCH --nice=1000000",   # yield to other jobs
+            "#SBATCH --requeue",        # allow SLURM auto-requeue after NODE_FAIL/BOOT_FAIL/PREEMPTED
         ]
 
         # Only add this line if num_gpus > 0:
@@ -110,7 +108,6 @@ def _slurmrule_impl(ctx):
 
 
         # DEPENDENCY OF PREVIOUS SLURM-JOB
-        additional_inputs = []
         sbatch_dependency_arg = ""
         if ctx.attr.after:
             # Get the jobid file from the provider of the dependency target
@@ -128,11 +125,63 @@ def _slurmrule_impl(ctx):
 
 
         #execute the shell script and directly write the JOBID to the file
-        cmd = "export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/slurm/bin && "
-        cmd += "JOBID=$(/opt/slurm/bin/sbatch {dep} {script} | awk '{{print $NF}}') && echo $JOBID > {jobid}".format(
-                dep = sbatch_dependency_arg,
-                script = job_script.path,
-                jobid = job_id_file.path,)
+        cmd = """
+set -euo pipefail
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/slurm/bin
+
+JOBID=""
+cancel_slurm_job() {{
+  if [ -n "$JOBID" ]; then
+    echo "Cancelling Slurm job $JOBID for {name}" >&2
+    /opt/slurm/bin/scancel "$JOBID" 2>/dev/null || true
+  fi
+}}
+trap cancel_slurm_job INT TERM HUP EXIT
+
+SUBMIT_OUTPUT=$(/opt/slurm/bin/sbatch --parsable {dep} {script})
+JOBID="${{SUBMIT_OUTPUT%%;*}}"
+echo "$JOBID" > {jobid}
+echo "Submitted Slurm job $JOBID for {name}"
+
+# Wait through SLURM auto-requeues. After NODE_FAIL / BOOT_FAIL /
+# PREEMPTED, SLURM keeps the same JobID and re-schedules it; the job
+# stays in squeue across those transitions. We only consult sacct for
+# the terminal verdict once squeue has fully drained, bounded by the
+# cluster's MaxJobRequeue.
+while true; do
+  QSTATE=$(/opt/slurm/bin/squeue -j "$JOBID" -h -O State 2>/dev/null | awk 'NF {{ print $1; exit }}' || true)
+  if [ -n "$QSTATE" ]; then
+    sleep 5
+    continue
+  fi
+
+  STATE=$(/opt/slurm/bin/sacct -j "$JOBID" -X --noheader --format=State%30 2>/dev/null | awk 'NF {{ print $1; exit }}' || true)
+  BASE_STATE="${{STATE%%+*}}"
+  case "$BASE_STATE" in
+    COMPLETED)
+      trap - INT TERM HUP EXIT
+      echo "Slurm job $JOBID completed successfully"
+      exit 0
+      ;;
+    FAILED|CANCELLED|TIMEOUT|OUT_OF_MEMORY|NODE_FAIL|PREEMPTED|BOOT_FAIL|DEADLINE|REVOKED)
+      trap - INT TERM HUP EXIT
+      echo "Slurm job $JOBID failed with state $STATE" >&2
+      exit 1
+      ;;
+    "")
+      sleep 5
+      ;;
+    *)
+      sleep 5
+      ;;
+  esac
+done
+""".format(
+            dep = sbatch_dependency_arg,
+            script = job_script.path,
+            jobid = job_id_file.path,
+            name = ctx.label.name,
+        )
 
 
     ### if we do not build it with SLURM: its a simple shell-command
@@ -140,11 +189,17 @@ def _slurmrule_impl(ctx):
         cmd = user_cmd
 
     ctx.actions.run_shell(
-        inputs = ctx.files.srcs + ([job_script] if use_slurm else []),
+        inputs = ctx.files.srcs + additional_inputs + ([job_script] if use_slurm else []),
         tools = [ctx.executable.tool] if ctx.attr.tool else [],
-        outputs = outputs,
+        outputs = outputs + ([job_id_file] if use_slurm else []),
         command = cmd,
         mnemonic = "SlurmRule",
+        execution_requirements = {
+            # SlurmRule targets often produce large, non-hermetic dataset
+            # directories. Keep them off remote exec/cache to avoid CAS upload
+            # failures for multi-GB artifacts.
+            "no-remote-exec": "1",
+        },
     )
 
 

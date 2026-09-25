@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     rosbag::View static_view(bag, rosbag::TopicQuery(static_topics));
     rosbag::View dynamic_view(bag, rosbag::TopicQuery(dynamic_topics));
 
-    tf2_ros::Buffer tf_buffer(ros::Duration(ros::DURATION_MAX));  // long buffer for full bag processing
+    tf2_ros::Buffer tf_buffer{ros::Duration(ros::DURATION_MAX)};  // long buffer for full bag processing
     std::set<ros::Time> timestamps;
 
     // Load static transforms first

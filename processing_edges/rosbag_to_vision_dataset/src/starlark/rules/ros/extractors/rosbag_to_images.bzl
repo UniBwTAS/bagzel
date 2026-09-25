@@ -24,6 +24,11 @@ def _rosbag_to_images_impl(ctx):
                 output_dir.path,
             ],
             progress_message = "[Extracting] Rosbag: '{}', Topic: '{}'".format(rosbag_name, topic),
+            execution_requirements = {
+                # Rosbags can be multi-GB inputs; keep extraction local so Bazel
+                # does not try to upload them to remote CAS/executors.
+                "no-remote-exec": "1",
+            },
         )
 
         all_outputs.append(output_dir)

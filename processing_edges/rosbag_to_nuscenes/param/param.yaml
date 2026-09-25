@@ -1,13 +1,11 @@
-<!--
-SPDX-FileCopyrightText: 2026 Lukas Beer <lukas.beer@unibw.de>
-
-SPDX-License-Identifier: Apache-2.0
--->
+# SPDX-FileCopyrightText: 2026 Lukas Beer <lukas.beer@unibw.de>
+#
+# SPDX-License-Identifier: Apache-2.0
 
 BAG_INFO:
   VEHICLE: TOUAREG
   DESCRIPTION: Touareg of the Institute for Autonomous Driving
-  ODOM_TOPIC: /localization/egomotion/odom #/bus/oxts/eth_ncom/bus_to_host
+  ODOM_TOPIC: /localization/egomotion/odom
   TRACK: TOUAREG
 SENSOR_INFO:
   LIDAR_TOP:
@@ -30,3 +28,10 @@ SENSOR_INFO:
     TOPIC: /sensor/camera/surround/right/image_raw
     FRAME: sensor/camera/surround/right
     TOKEN: a0000000000000000000000000000005
+CAN_INFO:
+  OXTS_TOPIC: /bus/oxts/eth_ncom/bus_to_host
+  FEEDBACK_TOPIC: /actuator/vehicle/feedback
+EXTRACTION:
+  min_bag_duration_sec: 20.02
+  scene_length_sec: 20.02
+  min_ego_distance_m: 2.0

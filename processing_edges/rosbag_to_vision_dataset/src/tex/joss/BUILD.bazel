@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-load("@bazel_latex//:latex.bzl", "latex_document")
-
 sh_binary(
     name = "inara_docker",
     srcs = ["tools/inara_docker.sh"],
@@ -41,41 +39,25 @@ genrule(
 
         # 1) Generate the preprint TeX via Inara
         "$(location :inara_docker)" "$(location paper.md)" "$@"
+
     """,
     local = True,
     visibility = ["//visibility:public"],
 )
 
-latex_document(
+genrule(
     name = "paper_preprint_pdf",
     srcs = [
-        ":joss_paper_preprint",
+        "paper.md",
         "paper.bib",
-        "tex_deps/authblk.sty",
-        "tex_deps/loadhyph-en-us.tex",
-        "tex_deps/hyph-en-us.tex",
-        "@bazel_latex//packages:amsmath",
-        "@bazel_latex//packages:amssymb",
-        "@bazel_latex//packages:iftex",
-        "@bazel_latex//packages:unicode-math",
-        "@bazel_latex//packages:upquote",
-        "@bazel_latex//packages:microtype",
-        "@bazel_latex//packages:parskip",
-        "@bazel_latex//packages:xcolor",
-        "@bazel_latex//packages:calc",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__generic__babel",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__generic__babel-english",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__luatexbase",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__ctablestack",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__luatex__hyph-utf8",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__lualatex__selnolig",
-        "@@bazel_latex++texlive_repositories+bazel_latex_texlive//:texlive_texmf__texmf-dist__tex__latex__orcidlink",
-        "@bazel_latex//packages:subcaption",
-        "@bazel_latex//packages:hyperref",
-        "@bazel_latex//packages:url",
-        "@bazel_latex//packages:tikz",
-    ] + glob(["figs/**/*"]),
-    main = "paper.preprint.tex",
+    ] + glob(["figs/**/*.pdf"]),
+    tools = [":inara_docker"],
+    outs = ["paper_preprint.pdf"],
+    cmd_bash = """
+        set -euo pipefail
+        "$(location :inara_docker)" "$(location paper.md)" "$@" preprint_pdf
+    """,
+    local = True,
 )
 
 filegroup(
@@ -84,8 +66,8 @@ filegroup(
         ":joss_paper_preprint",  # -> paper.preprint.tex
         "paper.bib",
     ] + glob([
-        "figs/**/*",
-        "tex_deps/**/*",
+        "figs/**/*.pdf",
+        "figs/**/*.jpg",
     ]),
     visibility = ["//visibility:public"],
 )
@@ -113,14 +95,8 @@ genrule(
                 cp "$$f" arxiv/paper.bib
 
             elif [[ "$$f" == *"/figs/"* ]]; then
-                # keep figs/ substructure
+                # keep figs/ substructure, but only pdf/png are in SRCS anyway
                 rel=figs/$${f##*figs/}
-                mkdir -p "arxiv/$$(dirname "$$rel")"
-                cp "$$f" "arxiv/$$rel"
-
-            elif [[ "$$f" == *"/tex_deps/"* ]]; then
-                # keep tex_deps/ substructure
-                rel=tex_deps/$${f##*tex_deps/}
                 mkdir -p "arxiv/$$(dirname "$$rel")"
                 cp "$$f" "arxiv/$$rel"
             fi
@@ -152,4 +128,3 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 # ------------------------------------------------------------------------------
-

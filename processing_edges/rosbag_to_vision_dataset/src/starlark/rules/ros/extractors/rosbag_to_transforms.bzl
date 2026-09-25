@@ -31,6 +31,11 @@ def _rosbag_to_transforms_impl(ctx):
         ],
         progress_message = "[Generating] Transforms + CameraInfo from rosbag: '{}'".format(rosbag_name),
         mnemonic = "ExtractTFAndCamera",
+        execution_requirements = {
+            # Rosbags can be multi-GB inputs; keep extraction local so Bazel
+            # does not try to upload them to remote CAS/executors.
+            "no-remote-exec": "1",
+        },
     )
 
     return [

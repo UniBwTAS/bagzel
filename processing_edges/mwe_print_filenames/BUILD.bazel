@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-load("@python_versions//3.8:defs.bzl", "py_binary")
+load("@python_versions//3.10:defs.bzl", "py_binary")
 load("@bagzel//starlark/core:shellrule.bzl", "shellrule")
 
 py_binary(

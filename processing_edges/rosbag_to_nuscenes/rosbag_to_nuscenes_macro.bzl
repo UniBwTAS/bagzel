@@ -20,9 +20,9 @@ def single_rosbag_to_nuscenes(
     ):
     src = [bag_file, param_file]
 
-    # If a file ends with db3, we need the directory as input.
-    # If a file ends with bag, we need the file as input.
-    if bag_file.endswith(".db3"):
+    # ROS2 bags (.db3 / .mcap) need the sibling metadata.yaml as input too.
+    # ROS1 bags (.bag) are a single self-contained file.
+    if bag_file.endswith(".db3") or bag_file.endswith(".mcap"):
         src.append(get_metadata_filename(bag_file))
     elif bag_file.endswith(".bag"):
         pass

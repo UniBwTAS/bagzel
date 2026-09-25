@@ -15,6 +15,7 @@ class MetaInfos:
         self.map = ""
         self.description = ""
         self.odom_topic = ""
+        self.feedback_topic = ""
 
 class SampleHelper:
     def __init__(self):

@@ -8,9 +8,9 @@
 filegroup(
     name = "everything",
     srcs = [
-        "//src/cpp:everything",
-        "//src/python:everything",
-        "//src/tex:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/cpp:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/python:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/tex:everything",
     ],
     visibility = ["//visibility:public"],
 )

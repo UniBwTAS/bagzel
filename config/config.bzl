@@ -39,10 +39,15 @@ SENSOR_META = {
         "TOPIC": "/sensor/camera/surround/right/image_raw",
     },
 }
+CAN_INFO={
+  "OXTS_TOPIC": "/bus/oxts/eth_ncom/bus_to_host",
+  "FEEDBACK_TOPIC": "/actuator/vehicle/feedback",
+}
 
 EXTRACTION = {
-    "min_bag_duration_sec": 0.25,
-    "scene_length_sec": 0.25
+    "min_bag_duration_sec": 0.41,
+    "scene_length_sec": 0.4,
+    "min_ego_distance_m": 1.0
   }
 
 
@@ -53,6 +58,7 @@ def nuscenes_param_dict():
         "BAG_INFO": BAG_INFO,
         "SENSOR_INFO": SENSOR_META,
         "EXTRACTION": EXTRACTION,
+        "CAN_INFO": CAN_INFO,
     }
 
 

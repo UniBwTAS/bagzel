@@ -8,7 +8,7 @@
 filegroup(
     name = "everything",
     srcs = [
-        "//src/tex/joss:everything",
+        "//processing_edges/rosbag_to_vision_dataset/src/tex/joss:everything",
     ],
     visibility = ["//visibility:public"],
 )

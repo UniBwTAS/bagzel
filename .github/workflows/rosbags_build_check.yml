@@ -18,16 +18,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        lfs: true  # optional, but helps ensure LFS files are fetched
-    
-    - name: Pull Git LFS objects
-      run: git lfs pull
+        # Figure assets (tex/joss/figs, evaluation figs) are LFS-tracked;
+        # the example dataset is NOT (it is fetched from the GitHub release).
+        lfs: true
 
-    - name: Build rosbags with Bazel
-      uses: addnab/docker-run-action@v3
+    - name: Set up Bazel
+      uses: bazel-contrib/setup-bazel@0.19.0
       with:
-        image: gcr.io/bazel-public/bazel:8.4.1
-        options: -v ${{ github.workspace }}:/workspace -w /workspace
-        run: |
-          bazel build @example_data//:data_pipeline_processed__everything
+        bazelisk-cache: true
+        disk-cache: ${{ github.workflow }}
+        repository-cache: true
 
+    - name: Build open-source targets
+      run: |
+        bazel build @example_data//:data_pipeline_processed__everything
+        bazel build //processing_edges/rosbag_to_vision_dataset/src:everything

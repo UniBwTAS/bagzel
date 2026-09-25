@@ -32,9 +32,8 @@ To obtain and prepare the source code:
 ```bash
 git clone https://github.com/UniBwTAS/bagzel.git
 cd bagzel
-git lfs pull
 ```
->⚠️ Ensure you run `git lfs pull` to fetch large files such as bag files tracked via Git LFS.
+> The immutable example dataset is **not part of the repository**: the standalone Bazel module automatically downloads it from the [`v0.2.0` GitHub release](https://github.com/UniBwTAS/bagzel/releases/tag/v0.2.0) at first use (see the `example_data` `http_archive` in `MODULE.bazel`). You do not need `git lfs pull` or any other manual download for the example data.
 
 
 
@@ -50,6 +49,10 @@ This section shows the two main functionalities of Bagzel:
 These are the simplest “sanity check” builds that avoid the heavier cross-bag steps.
 
 ### 1) Fastest: build only NuScenes exports (ROS1 + ROS2)
+
+The `example_data` repository is downloaded automatically from the immutable
+[`v0.2.0` GitHub release](https://github.com/UniBwTAS/bagzel/releases/tag/v0.2.0)
+archive — no manual download and no Git LFS involved.
 
 ```bash
 bazel build @example_data//:data_pipeline_processed__nuscenes_data
@@ -90,9 +93,9 @@ bazel build @example_data//:data_pipeline_processed__everything
 
 ### 1. Build own dataset from ROS 1 and ROS 2 bags
 
-The example data is exposed to Bazel via an **external repository**. Bazel then manages all symlinks internally, so you do **not** need to create any symlinks inside the project directory.
+The built-in example dataset is fetched automatically from the GitHub release archive; it needs no configuration. To process **your own** recordings, expose them to Bazel via an **external repository**. Bazel then manages all symlinks internally, so you do **not** need to create any symlinks inside the project directory.
 
-You can configure where your bag data is located via the `path` attribute in `MODULE.bazel`. Relative paths are interpreted w.r.t. the workspace root; absolute paths are also supported. For the minimal working example you can leave the default value as is.
+You can configure where your bag data is located via the `path` attribute in `MODULE.bazel`. Relative paths are interpreted w.r.t. the workspace root; absolute paths are also supported.
 
 Add the following to your `MODULE.bazel`:
 
@@ -282,32 +285,71 @@ bazel query @own_example_data//:all
 
 ---
 
+## 📄 Publications
+
+Bagzel is described in an IEEE CASE 2026 conference paper and two open-access
+preprints. For academic use, prefer the conference paper.
+
+| Publication | Venue | Links |
+| --- | --- | --- |
+| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE), Shenyang, China, 17–21 August 2026 | [arXiv](https://arxiv.org/abs/2606.00162) · [prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW) |
+| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | arXiv preprint, arXiv:2606.00162 | [paper](https://doi.org/10.48550/arXiv.2606.00162) |
+| **Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags** | engrXiv preprint | [paper](https://doi.org/10.31224/6452) |
+
 ## 🎤 Conferences
 
 Bagzel has been presented at the following venues:
 
-- **ROSCon DE & FR 2025** – *Processing ROSbags at Scale: Reproducible Data Workflows for Robotics* 
-    [Slides](https://roscon.ros.org/de/2025/img/slides/S2_4__Pohl__Processing_ROSbags_at_Scale_Reproducible_Data_Workflows_for_Robotics.pdf)  [Recording](https://vimeo.com/showcase/12079514?video=1156745897)
-- **BazelCon 2025** – *Bazel Beyond Code: Scalable AI Data Pipelines for Autonomous Systems* 
-    [Slides / Recording](https://sched.co/2AFgF)
+* **IEEE CASE 2026** – *Modeling Robotics Dataset Construction as an Artifact-Based Build Process*
+  [Prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW)
+
+* **ROSCon DE & FR 2025** – *Processing ROSbags at Scale: Reproducible Data Workflows for Robotics*
+  [Slides](https://roscon.ros.org/de/2025/img/slides/S2_4__Pohl__Processing_ROSbags_at_Scale_Reproducible_Data_Workflows_for_Robotics.pdf) · [Recording](https://vimeo.com/showcase/12079514?video=1156745897)
+
+* **BazelCon 2025** – *Bazel Beyond Code: Scalable AI Data Pipelines for Autonomous Systems*
+  [Slides / Recording](https://sched.co/2AFgF)
+
 
 ---
 
 ## 📖 How to cite
 
-If you use Bagzel in your research or production work, please cite it as:
+If you use Bagzel in academic work, please prefer the IEEE CASE 2026 conference
+paper. The repository also includes [`CITATION.cff`](CITATION.cff) for GitHub's
+citation tooling. The CASE entry will be extended with its DOI and page range
+once its IEEE Xplore record is available.
 
 ```bibtex
-@misc{bagzel,
+@inproceedings{pohl2026modeling,
+  author    = {Pohl, Leon and Beer, Lukas and Sebastian, George and Maehlisch, Mirko},
+  title     = {Modeling Robotics Dataset Construction as an Artifact-Based Build Process},
+  booktitle = {2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE)},
+  year      = {2026},
+  month     = aug,
+  address   = {Shenyang, China},
+  publisher = {IEEE}
+}
+
+@misc{pohl2026moda,
+  author        = {Pohl, Leon and Beer, Lukas and Sebastian, George and Maehlisch, Mirko},
+  title         = {Modeling Robotics Dataset Construction as an Artifact-Based Build Process},
+  year          = {2026},
+  month         = may,
+  archiveprefix = {arXiv},
+  eprint        = {2606.00162},
+  doi           = {10.48550/arXiv.2606.00162}
+}
+
+@misc{pohl2026bag,
   author       = {Pohl, Leon and Beer, Lukas and Sebastian, George and Maehlisch, Mirko},
   title        = {Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags},
-  year         = {2025},
-  howpublished = {\url{https://github.com/UniBwTAS/bagzel}},
-  note         = {Accessed: YYYY-MM-DD}
+  year         = {2026},
+  month        = feb,
+  publisher    = {engrXiv},
+  doi          = {10.31224/6452},
+  howpublished = {engrXiv preprint}
 }
 ```
-
-Replace `YYYY-MM-DD` in the `note` field with the date you accessed the repository.
 
 ---
 
