@@ -8,6 +8,8 @@ SPDX-License-Identifier: Apache-2.0
 
 **Bagzel** is an efficient and reproducible data extraction pipeline for ROS 1 and ROS 2 bag files, built on **Bazel**. It generates structured datasets from recorded robotic data—including image sequences, GPS logs, metadata, and map visualizations—and supports exporting data in the standardized nuScenes format.
 
+![Bagzel teaser: an incremental Bazel build of the example bags exports a nuScenes-format dataset. Dataset samples are from an example pipeline run; the evaluation numbers are from the IEEE CASE 2026 paper.](assets/teaser.gif)
+
 ---
 
 ## 🚀 Installation
@@ -287,13 +289,12 @@ bazel query @own_example_data//:all
 
 ## 📄 Publications
 
-Bagzel is described in an IEEE CASE 2026 conference paper and two open-access
-preprints. For academic use, prefer the conference paper.
+Bagzel is described in an IEEE CASE 2026 conference paper and an open-access
+preprint. For academic use, prefer the conference paper.
 
 | Publication | Venue | Links |
 | --- | --- | --- |
-| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE), Shenyang, China, 17–21 August 2026, pp. 2636–2641 | [IEEE Xplore](https://doi.org/10.1109/CASE69030.2026.11704392) · [arXiv](https://arxiv.org/abs/2606.00162) · [prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW) |
-| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | arXiv preprint, arXiv:2606.00162 | [paper](https://doi.org/10.48550/arXiv.2606.00162) |
+| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE), Shenyang, China, 17–21 August 2026, pp. 2636–2641 | [IEEE Xplore](https://doi.org/10.1109/CASE69030.2026.11704392) · [prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW) |
 | **Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags** | engrXiv preprint | [paper](https://doi.org/10.31224/6452) |
 
 ## 🎤 Conferences
@@ -329,16 +330,6 @@ citation tooling, which references only the IEEE version of the paper.
   pages     = {2636--2641},
   publisher = {IEEE},
   doi       = {10.1109/CASE69030.2026.11704392}
-}
-
-@misc{pohl2026moda,
-  author        = {Pohl, Leon and Beer, Lukas and Sebastian, George and Maehlisch, Mirko},
-  title         = {Modeling Robotics Dataset Construction as an Artifact-Based Build Process},
-  year          = {2026},
-  month         = may,
-  archiveprefix = {arXiv},
-  eprint        = {2606.00162},
-  doi           = {10.48550/arXiv.2606.00162}
 }
 
 @misc{pohl2026bag,
