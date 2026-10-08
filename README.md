@@ -292,7 +292,7 @@ preprints. For academic use, prefer the conference paper.
 
 | Publication | Venue | Links |
 | --- | --- | --- |
-| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE), Shenyang, China, 17–21 August 2026 | [arXiv](https://arxiv.org/abs/2606.00162) · [prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW) |
+| **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | 2026 IEEE 22nd International Conference on Automation Science and Engineering (CASE), Shenyang, China, 17–21 August 2026, pp. 2636–2641 | [IEEE Xplore](https://doi.org/10.1109/CASE69030.2026.11704392) · [arXiv](https://arxiv.org/abs/2606.00162) · [prerecorded presentation](https://youtu.be/x6ia-x3_nf0?si=2PJfOVnFWp-ax1cW) |
 | **Modeling Robotics Dataset Construction as an Artifact-Based Build Process** | arXiv preprint, arXiv:2606.00162 | [paper](https://doi.org/10.48550/arXiv.2606.00162) |
 | **Bagzel: A Bazel Extension for Reproducible Dataset Builds from ROS 1 and ROS 2 Bags** | engrXiv preprint | [paper](https://doi.org/10.31224/6452) |
 
@@ -314,10 +314,9 @@ Bagzel has been presented at the following venues:
 
 ## 📖 How to cite
 
-If you use Bagzel in academic work, please prefer the IEEE CASE 2026 conference
+If you use Bagzel in academic work, please cite the IEEE CASE 2026 conference
 paper. The repository also includes [`CITATION.cff`](CITATION.cff) for GitHub's
-citation tooling. The CASE entry will be extended with its DOI and page range
-once its IEEE Xplore record is available.
+citation tooling, which references only the IEEE version of the paper.
 
 ```bibtex
 @inproceedings{pohl2026modeling,
@@ -327,7 +326,9 @@ once its IEEE Xplore record is available.
   year      = {2026},
   month     = aug,
   address   = {Shenyang, China},
-  publisher = {IEEE}
+  pages     = {2636--2641},
+  publisher = {IEEE},
+  doi       = {10.1109/CASE69030.2026.11704392}
 }
 
 @misc{pohl2026moda,
